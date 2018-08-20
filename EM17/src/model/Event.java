@@ -18,6 +18,7 @@ public class Event {
     private String ticketsSell;
     private String type;
     private String description;
+    private String price;
     private File immagine;  
     public void setId (String x)
     {
@@ -58,6 +59,10 @@ public class Event {
     public void setDescription(String x)
     {
         description = x;
+    }
+    public void setPrice(String x)
+    {
+        price = x;
     }
     public void setImage(File x)
     {
@@ -102,6 +107,10 @@ public class Event {
     public String getDescription()
     {
         return description;
+    }
+    public String getPrice()
+    {
+        return price;
     }
     public File getImmagine()
     {

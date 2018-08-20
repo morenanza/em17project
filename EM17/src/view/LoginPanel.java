@@ -7,6 +7,7 @@ package view;
 
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -21,6 +22,7 @@ public class LoginPanel extends javax.swing.JFrame {
      */
     public LoginPanel() {
         initComponents();
+        errorLabel.setVisible(false);
     }
 
     /**
@@ -38,6 +40,7 @@ public class LoginPanel extends javax.swing.JFrame {
         userField = new javax.swing.JTextField();
         loginButton = new javax.swing.JButton();
         passwordField = new javax.swing.JPasswordField();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,28 +53,32 @@ public class LoginPanel extends javax.swing.JFrame {
 
         loginButton.setText("ACCEDI");
 
+        errorLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        errorLabel.setText("Username o Password Errata!");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(45, 45, 45)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel2))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(userField)
+                                .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(107, 107, 107)
-                        .addComponent(loginButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
+                        .addComponent(errorLabel)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(userField)
-                            .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))))
-                .addContainerGap(16, Short.MAX_VALUE))
+                        .addComponent(loginButton)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,7 +94,9 @@ public class LoginPanel extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(loginButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loginButton)
+                    .addComponent(errorLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -99,6 +108,7 @@ public class LoginPanel extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -117,6 +127,10 @@ public class LoginPanel extends javax.swing.JFrame {
     public JButton getLoginButton()
     {
         return loginButton;
+    }
+    public JLabel getErrorLabel()
+    {
+        return errorLabel;
     }
 }
 
