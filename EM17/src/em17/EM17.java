@@ -14,15 +14,9 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import view.LoginPanel;
 
-/**
- *
- * @author Morena
- */
 public class EM17 {
 
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String[] args) throws SQLException {
         
        try {

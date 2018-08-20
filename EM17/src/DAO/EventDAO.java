@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DAO;
 
 import InterfaceDAO.InterfaceEventDAO;
@@ -225,16 +220,136 @@ public class EventDAO implements InterfaceEventDAO{
             }
         }
     }
-        
-
+    
     @Override
     public void removeEvent(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String sql = "DELETE FROM em17.event where id =  '" + id + "'";
+            stm.execute(sql);
+            //conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public ArrayList<Event> getEventFiltered(String city, String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Event> eventi = new ArrayList();
+        try{
+            if(city.equals("-") && type.equals("-"))
+            {
+                String query = "SELECT * FROM em17.event";
+                stm = conn.createStatement();
+                ResultSet rs = stm.executeQuery(query);
+                while(rs.next())
+                {
+                    Event evento = new Event();
+                    evento.setId(rs.getString("id"));
+                    evento.setTitle(rs.getString("title"));
+                    evento.setPosition(rs.getString("position"));
+                    evento.setCity(rs.getString("city"));
+                    evento.setDate(rs.getString("date"));
+                    evento.setHour(rs.getString("hour"));
+                    evento.setTicketsAvaible(rs.getString("ticketsAvaible"));
+                    evento.setTicketsSell(rs.getString("ticketsSell"));
+                    evento.setPrice(rs.getString("price"));
+                    evento.setType(rs.getString("type"));
+                    evento.setDescription(rs.getString("description"));
+
+                    eventi.add(evento);
+                }
+            } else if(!(city.equals("-")) && !(type.equals("-")))
+            {
+                String query = "SELECT * FROM em17.event WHERE type = '" + type + "' AND city = '" + city + "'";
+                stm = conn.createStatement();
+                ResultSet rs = stm.executeQuery(query);
+                while(rs.next())
+                {
+                    Event evento = new Event();
+                    evento.setId(rs.getString("id"));
+                    evento.setTitle(rs.getString("title"));
+                    evento.setPosition(rs.getString("position"));
+                    evento.setCity(rs.getString("city"));
+                    evento.setDate(rs.getString("date"));
+                    evento.setHour(rs.getString("hour"));
+                    evento.setTicketsAvaible(rs.getString("ticketsAvaible"));
+                    evento.setTicketsSell(rs.getString("ticketsSell"));
+                    evento.setPrice(rs.getString("price"));
+                    evento.setType(rs.getString("type"));
+                    evento.setDescription(rs.getString("description"));
+
+                    eventi.add(evento);
+                }
+            } else if(city.equals("-") && !(type.equals("-")))
+            {
+                String query = "SELECT * FROM em17.event WHERE type = '" + type + "'";
+                stm = conn.createStatement();
+                ResultSet rs = stm.executeQuery(query);
+                while(rs.next())
+                {
+                    Event evento = new Event();
+                    evento.setId(rs.getString("id"));
+                    evento.setTitle(rs.getString("title"));
+                    evento.setPosition(rs.getString("position"));
+                    evento.setCity(rs.getString("city"));
+                    evento.setDate(rs.getString("date"));
+                    evento.setHour(rs.getString("hour"));
+                    evento.setTicketsAvaible(rs.getString("ticketsAvaible"));
+                    evento.setTicketsSell(rs.getString("ticketsSell"));
+                    evento.setPrice(rs.getString("price"));
+                    evento.setType(rs.getString("type"));
+                    evento.setDescription(rs.getString("description"));
+
+                    eventi.add(evento);
+                }
+            } else if(!(city.equals("-")) && type.equals("-"))
+            {
+                String query = "SELECT * FROM em17.event WHERE city = '" + city + "'";
+                stm = conn.createStatement();
+                ResultSet rs = stm.executeQuery(query);
+                while(rs.next())
+                {
+                    Event evento = new Event();
+                    evento.setId(rs.getString("id"));
+                    evento.setTitle(rs.getString("title"));
+                    evento.setPosition(rs.getString("position"));
+                    evento.setCity(rs.getString("city"));
+                    evento.setDate(rs.getString("date"));
+                    evento.setHour(rs.getString("hour"));
+                    evento.setTicketsAvaible(rs.getString("ticketsAvaible"));
+                    evento.setTicketsSell(rs.getString("ticketsSell"));
+                    evento.setPrice(rs.getString("price"));
+                    evento.setType(rs.getString("type"));
+                    evento.setDescription(rs.getString("description"));
+
+                    eventi.add(evento);
+                }
+            }
+        }
+        catch(SQLException e)
+        {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return eventi;
+    }
+    
+    public ArrayList<String> getCityEvent()
+    {
+        ArrayList<String> city = new ArrayList();
+        String query = "SELECT * FROM em17.city_view";
+            
+        try {
+            stm = conn.createStatement();
+        
+            ResultSet rs = stm.executeQuery(query);
+            while(rs.next())
+            {
+                city.add(rs.getString("city"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return city;
     }
     
     //Funzione che permette di convertire il file in input in un array di byte.

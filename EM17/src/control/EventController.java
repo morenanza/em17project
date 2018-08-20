@@ -1,11 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package control;
 
 import DAO.EventDAO;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,10 +13,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import model.Event;
+import view.ConfirmWindow;
 import view.EventWindow;
 
 public class EventController {
@@ -77,7 +77,15 @@ public class EventController {
                     view.getTicketsAvaibleField().setText("");
                     file = null;
                     view.getLabelFile().setText("");
+                    view.getDescriptionField().setText("");
                     view.refreshTable();
+                    view.refreshTableS();
+                    ArrayList<String> city = EventController.getCityEvent();
+                    String[] città = new String[city.size()+1];
+                    città[0] = "-";  
+                    for (int i=1; i<city.size()+1; i++)
+                        città[i] = city.get(i-1);
+                    view.getCitySearchField().setModel(new javax.swing.DefaultComboBoxModel<>(città));
                 }
                 else                
                 {
@@ -135,6 +143,20 @@ public class EventController {
                 } else 
                 {
                     view.getCityField().setText("");
+                }
+                if(table.getValueAt(row, 5) != null)
+                {
+                    view.getDateTableField().setText(table.getValueAt(row, 5).toString());
+                } else 
+                {
+                    view.getDateTableField().setText("");
+                }
+                if(table.getValueAt(row, 6) != null)
+                {
+                    view.getHourField().setText(table.getValueAt(row, 6).toString());
+                } else 
+                {
+                    view.getHourField().setText("");
                 }
                 if(table.getValueAt(row, 7) != null)
                 {
@@ -199,7 +221,9 @@ public class EventController {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"),Locale.ITALY);
                 Date today = calendar.getTime();
                 if(view.getDateField().getDate().compareTo(today) >= 0){
-                    evento.setDate(view.getDateField().getDate().toString().substring(0, 10) + " " + view.getDateField().getDate().toString().substring(25, 29));
+                    if(view.getDateField().getDate().toString().contains("CEST"))
+                        evento.setDate(view.getDateField().getDate().toString().substring(0, 10) + " " + view.getDateField().getDate().toString().substring(25, 29));
+                    else evento.setDate(view.getDateField().getDate().toString().substring(0, 10) + " " + view.getDateField().getDate().toString().substring(24, 28));
                 }else
                 {
                     JOptionPane.showMessageDialog(view, "Non è possibile modificare un evento inserendo una data precedente alla data odierna");
@@ -212,14 +236,77 @@ public class EventController {
             
             
             modello.updateEvent(evento);
+            view.getTitleField().setText("");
+            view.getPositionField().setText("");
+            view.getCityField().setText("");
+            view.getTypeField().setSelectedIndex(0);
+            view.getDateField().setDate(null);
+            view.getHourField().setText(":");
+            view.getPriceField().setText("");
+            view.getTicketsAvaibleField().setText("");
+            view.getDescriptionField().setText("");
+            file = null;
+            view.getLabelFile().setText("");
             view.refreshTable();
+            view.refreshTableS();
+            ArrayList<String> city = EventController.getCityEvent();
+            String[] città = new String[city.size()+1];
+            città[0] = "-";  
+            for (int i=1; i<city.size()+1; i++)
+                città[i] = city.get(i-1);
+            view.getCitySearchField().setModel(new javax.swing.DefaultComboBoxModel<>(città));
         });
         
+        view.getDeleteButton().addActionListener((ActionEvent e) -> 
+        {
+            Event evento = new Event();
+            evento.setId(view.getIdField().getText());
+            evento.setTitle(view.getTitleField().getText());
+            evento.setType(view.getTypeField().getSelectedItem().toString());
+            evento.setHour(view.getHourField().getText());
+            evento.setTicketsAvaible(view.getTicketsAvaibleField().getText());
+            evento.setPrice(view.getPriceField().getText());
+            evento.setCity(view.getCityField().getText());
+            evento.setPosition(view.getPositionField().getText());
+            ConfirmWindow dialog = new ConfirmWindow(view, true, evento);
+            Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+            dialog.setLocation(new Point((dimension.width - dialog.getSize().width) / 2, 
+            (dimension.height - dialog.getSize().height) / 2 ));
+            dialog.setVisible(true);
+        });
+        
+        view.getTypeSearchField().addActionListener((ActionEvent e) -> 
+        {
+            EventDAO event = new EventDAO();
+            JComboBox type = view.getTypeSearchField();
+            JComboBox city = view.getCitySearchField();
+            ArrayList<Event> eventi = refreshRecordSearch(city.getSelectedItem().toString(), type.getSelectedItem().toString());
+            view.refreshTableSearch(eventi);
+        });
+        
+        view.getCitySearchField().addActionListener((ActionEvent e) -> 
+        {
+            EventDAO event = new EventDAO();
+            JComboBox type = view.getTypeSearchField();
+            JComboBox city = view.getCitySearchField();
+            ArrayList<Event> eventi = refreshRecordSearch(city.getSelectedItem().toString(), type.getSelectedItem().toString());
+            view.refreshTableSearch(eventi);
+        });
     }
     
     
      public static ArrayList<Event> refreshRecord() {
         EventDAO model = new EventDAO();
         return model.getAllEvent();
+    }
+     
+    public static ArrayList<Event> refreshRecordSearch(String x, String y) {
+        EventDAO model = new EventDAO();
+        return model.getEventFiltered(x, y);
+    }
+    
+    public static ArrayList<String> getCityEvent() {
+        EventDAO model = new EventDAO();
+        return model.getCityEvent();
     }
 }
