@@ -5,17 +5,38 @@
  */
 package view;
 
+import com.toedter.calendar.JDateChooser;
+import java.util.ArrayList;
+import model.Event;
+import control.EventController;
+import java.text.ParseException;
+import java.util.Locale;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
+
 /**
  *
  * @author Morena
  */
 public class EventWindow extends javax.swing.JFrame {
-
+    private DefaultTableModel defaultTableModel;
     /**
      * Creates new form EventWindow
      */
     public EventWindow() {
         initComponents();
+        setUpJTableModel();
+        idField.setVisible(false);
+        deleteButton.setEnabled(false);
+        updateButton.setEnabled(false);
     }
 
     /**
@@ -36,13 +57,11 @@ public class EventWindow extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         cityField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        dateField = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
-        hourField = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
         priceField = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        ticketsField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionField = new javax.swing.JTextArea();
@@ -55,6 +74,20 @@ public class EventWindow extends javax.swing.JFrame {
         insertButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        idField = new javax.swing.JTextField();
+        dateField = new com.toedter.calendar.JDateChooser();
+        MaskFormatter mask = null;
+        try {
+            mask = new MaskFormatter("##:##");//the # is for numeric values
+            //mask.setPlaceholderCharacter('#');
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //
+        hourField = new javax.swing.JFormattedTextField(mask);
+        jLabel14 = new javax.swing.JLabel();
+        labelFile = new javax.swing.JLabel();
         filterPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         eventFilteredTable = new javax.swing.JTable();
@@ -65,6 +98,8 @@ public class EventWindow extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        eventPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setText("TITOLO");
 
@@ -88,7 +123,8 @@ public class EventWindow extends javax.swing.JFrame {
 
         jLabel9.setText("TIPOLOGIA");
 
-        typeField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        String[] type = new String[] {"Concerto", "Mostra", "Spettacolo", "Teatro"};
+        typeField.setModel(new javax.swing.DefaultComboBoxModel<>(type));
 
         jLabel10.setText("LOCANDINA");
 
@@ -113,6 +149,11 @@ public class EventWindow extends javax.swing.JFrame {
 
         deleteButton.setText("ELIMINA");
 
+        dateField.setLocale(Locale.ITALIAN);
+        dateField.setBackground(new java.awt.Color(255, 255, 255));
+
+        labelFile.setText(" ");
+
         javax.swing.GroupLayout eventPanelLayout = new javax.swing.GroupLayout(eventPanel);
         eventPanel.setLayout(eventPanelLayout);
         eventPanelLayout.setHorizontalGroup(
@@ -133,38 +174,47 @@ public class EventWindow extends javax.swing.JFrame {
                             .addComponent(positionField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)))
                     .addGroup(eventPanelLayout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ticketsField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(typeField, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
-                .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(imgButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addComponent(cityField, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(jLabel10))
-                .addGap(18, 18, 18)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(eventPanelLayout.createSequentialGroup()
+                        .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(imgButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                .addComponent(cityField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18))
+                    .addGroup(eventPanelLayout.createSequentialGroup()
+                        .addComponent(labelFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(78, 78, 78)))
                 .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addGroup(eventPanelLayout.createSequentialGroup()
                         .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(eventPanelLayout.createSequentialGroup()
-                                .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(hourField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(eventPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(91, 91, 91)
-                                .addComponent(jLabel5)))
+                                .addComponent(jLabel5))
+                            .addGroup(eventPanelLayout.createSequentialGroup()
+                                .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(hourField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
             .addComponent(jScrollPane2)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, eventPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(insertButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(updateButton)
@@ -184,13 +234,14 @@ public class EventWindow extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(titleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(positionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(hourField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(titleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(positionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(hourField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -199,21 +250,29 @@ public class EventWindow extends javax.swing.JFrame {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(typeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(imgButton))
+                    .addGroup(eventPanelLayout.createSequentialGroup()
+                        .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ticketsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(typeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(imgButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(labelFile)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(insertButton)
                     .addComponent(updateButton)
-                    .addComponent(deleteButton))
+                    .addComponent(deleteButton)
+                    .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         tabPanel.addTab("Eventi", eventPanel);
+
+        filterPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         eventFilteredTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -295,7 +354,7 @@ public class EventWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cityField;
-    private javax.swing.JFormattedTextField dateField;
+    private com.toedter.calendar.JDateChooser dateField;
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextArea descriptionField;
     private javax.swing.JTable eventFilteredTable;
@@ -303,6 +362,7 @@ public class EventWindow extends javax.swing.JFrame {
     private javax.swing.JTable eventTable;
     private javax.swing.JPanel filterPanel;
     private javax.swing.JFormattedTextField hourField;
+    private javax.swing.JTextField idField;
     private javax.swing.JButton imgButton;
     private javax.swing.JButton insertButton;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -312,6 +372,7 @@ public class EventWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -323,12 +384,112 @@ public class EventWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel labelFile;
     private javax.swing.JTextField positionField;
     private javax.swing.JTextField priceField;
     private javax.swing.JTabbedPane tabPanel;
+    private javax.swing.JTextField ticketsField;
     private javax.swing.JTextField titleField;
     private javax.swing.JComboBox<String> typeField;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+    public final void setUpJTableModel() {
+        defaultTableModel = new DefaultTableModel();
+        eventTable.setModel(defaultTableModel);
+        defaultTableModel.addColumn("ID");
+        defaultTableModel.addColumn("TITOLO");
+        defaultTableModel.addColumn("TIPOLOGIA");
+        defaultTableModel.addColumn("LUOGO");
+        defaultTableModel.addColumn("CITTA'");
+        defaultTableModel.addColumn("DATA");
+        defaultTableModel.addColumn("ORARIO");
+        defaultTableModel.addColumn("COSTO");
+        defaultTableModel.addColumn("BIGLIETTI TOTALI");
+        defaultTableModel.addColumn("BIGLIETTI VENDUTI");
+        defaultTableModel.addColumn("DESCRIZIONE");
+        DefaultCellEditor editor = (DefaultCellEditor) eventTable.getDefaultEditor(Object.class);      
+        editor.setClickCountToStart(1000000);        
+        refreshTable();
+        
+    }
+    
+    public void refreshTable() {
+
+        defaultTableModel.getDataVector().clear();
+
+        ArrayList<Event> eventi = EventController.refreshRecord();
+
+        eventi.stream().forEach((currentEvent) -> {
+            defaultTableModel.addRow(new Object[]{currentEvent.getId(), currentEvent.getTitle(), currentEvent.getType(), currentEvent.getPosition(), currentEvent.getCity(), currentEvent.getDate(), currentEvent.getHour(), currentEvent.getPrice(), currentEvent.getTicketsAvaible(), currentEvent.getTicketsSell(), currentEvent.getDescription()});
+        });
+        defaultTableModel.fireTableDataChanged();
+    }
+    public JTextField getIdField()
+    {
+        return idField;
+    }
+
+    public JTextField getTitleField()
+    {
+        return titleField;
+    }
+    public JTextField getPositionField()
+    {
+        return positionField;
+    }
+    
+    public JTextField getCityField()
+    {
+        return cityField;
+    }
+    
+    public JTextField getPriceField()
+    {
+        return priceField;
+    }
+    public JTextField getTicketsAvaibleField()
+    {
+        return ticketsField;
+    }
+    public JLabel getLabelFile()
+    {
+        return labelFile;
+    }
+    public JTextArea getDescriptionField()
+    {
+        return descriptionField;
+    }
+    public JFormattedTextField getHourField()
+    {
+        return hourField;
+    }
+    public JDateChooser getDateField()
+    {
+        return dateField;
+    }
+    public JComboBox getTypeField()
+    {
+        return typeField;
+    }
+    
+    public JButton getChooseImgButton()
+    {
+        return imgButton;
+    }
+    public JButton getInsertButton()
+    {
+        return insertButton;
+    }
+    public JButton getUpdateButton()
+    {
+        return updateButton;
+    }
+    public JButton getDeleteButton()
+    {
+        return deleteButton;
+    }
+    public JTable getEventTable()
+    {
+        return eventTable;
+    }
 }
