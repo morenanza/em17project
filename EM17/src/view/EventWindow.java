@@ -1,5 +1,6 @@
 package view;
 
+import DAO.EventDAO;
 import com.toedter.calendar.JDateChooser;
 import java.util.ArrayList;
 import model.Event;
@@ -173,11 +174,11 @@ public class EventWindow extends javax.swing.JFrame {
                 .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(eventPanelLayout.createSequentialGroup()
                         .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
                             .addGroup(eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(imgButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                                 .addComponent(cityField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(jLabel10))
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(18, 18, 18))
                     .addGroup(eventPanelLayout.createSequentialGroup()
                         .addComponent(labelFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -345,6 +346,7 @@ public class EventWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cityField;
     private javax.swing.JComboBox<String> citySearchField;

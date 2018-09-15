@@ -26,6 +26,7 @@ public class EventController {
     EventWindow view;
     EventDAO model;
     File file;
+    public EventController(){}
     public EventController(EventWindow x, EventDAO y)
     {
         view = x;
@@ -36,7 +37,8 @@ public class EventController {
             int returnVal = fc.showOpenDialog(view);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 file = fc.getSelectedFile();
-                if(file.getName().endsWith(".jpg")){
+                if(checkValidExtension(file.getName()) == 1)
+                {
                     view.getLabelFile().setText(file.getName());
                 } else 
                 {
@@ -52,13 +54,15 @@ public class EventController {
             Event evento = new Event();
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"),Locale.ITALY);
             Date today = calendar.getTime();
-            if(view.getDateField().getDate().compareTo(today) >= 0){
+            if(view.getDateField().getDate() != null && view.getDateField().getDate().compareTo(today) >= 0){
                 evento.setId("1");
                 evento.setTitle(view.getTitleField().getText());
                 evento.setPosition(view.getPositionField().getText());
                 evento.setCity(view.getCityField().getText());
                 evento.setType(view.getTypeField().getSelectedItem().toString());
-                evento.setDate(view.getDateField().getDate().toString().substring(0, 10) + " " + view.getDateField().getDate().toString().substring(25, 29));
+                if(view.getDateField().getDate().toString().contains("CEST"))
+                    evento.setDate(view.getDateField().getDate().toString().substring(0, 10) + " " + view.getDateField().getDate().toString().substring(25, 29));
+                else evento.setDate(view.getDateField().getDate().toString().substring(0, 10) + " " + view.getDateField().getDate().toString().substring(24, 28));
                 evento.setHour(view.getHourField().getText());
                 evento.setPrice(view.getPriceField().getText());
                 evento.setTicketsAvaible(view.getTicketsAvaibleField().getText());
@@ -93,7 +97,10 @@ public class EventController {
                 }
             } else
             {
-                JOptionPane.showMessageDialog(view, "Non è possibile inserire eventi con data precedente alla odierna");
+                if(view.getDateField().getDate() == null)
+                {
+                    JOptionPane.showMessageDialog(view, "DEVI INSERIRE UNA DATA");
+                }else JOptionPane.showMessageDialog(view, "Non è possibile inserire eventi con data precedente alla odierna");
             }
         });
         
@@ -308,5 +315,15 @@ public class EventController {
     public static ArrayList<String> getCityEvent() {
         EventDAO model = new EventDAO();
         return model.getCityEvent();
+    }
+    
+    public int checkValidExtension(String namefile)
+    {
+        
+        if(namefile.endsWith(".jpg"))
+        {
+            return 1;
+        }
+        return -1;
     }
 }
