@@ -6,7 +6,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Event;
 
-public class EventDAO implements InterfaceEventDAO{
+public class EventDAO implements InterfaceEventDAO {
     private final Database db = new Database();
     private final Connection conn = db.Connect();
     private Statement stm = null; 
@@ -25,7 +27,7 @@ public class EventDAO implements InterfaceEventDAO{
     public ArrayList<Event> getAllEvent() {
         ArrayList<Event> eventi = new ArrayList();
         try {
-            String query = "SELECT * FROM em17.event";
+            String query = "SELECT * FROM em17.events";
             
             stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(query);
@@ -58,7 +60,7 @@ public class EventDAO implements InterfaceEventDAO{
 
     @Override
     public void insertEvent(Event e) {
-        String sql = "INSERT INTO em17.event (title, position, city, date, hour, ticketsAvaible, ticketsSell, type, description, img, price) VALUES ('" + e.getTitle() + "', '" + e.getPosition() + "', '" + e.getCity() + "', '" + e.getDate() + "', '" + e.getHour() + "', '" + e.getTicketsAvaible() + "', '0', '" + e.getType() + "', '" + e.getDescription() + "', ?, '" + e.getPrice() + "')";
+        String sql = "INSERT INTO em17.events (title, position, city, date, hour, ticketsAvaible, ticketsSell, type, description, img, price) VALUES ('" + e.getTitle() + "', '" + e.getPosition() + "', '" + e.getCity() + "', '" + e.getDate() + "', '" + e.getHour() + "', '" + e.getTicketsAvaible() + "', '0', '" + e.getType() + "', '" + e.getDescription() + "', ?, '" + e.getPrice() + "')";
         PreparedStatement ps; 
         try {
             ps = conn.prepareStatement(sql);
@@ -75,7 +77,7 @@ public class EventDAO implements InterfaceEventDAO{
         if(e.getDate() == null && e.getImmagine() == null && e.getHour().substring(0, 1).equals(" ")){
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -90,7 +92,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             
 
-            String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+            String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                     + " city = '" + e.getCity() + "',"
                     + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                     + " type = '" + e.getType() + "',"
@@ -111,7 +113,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -127,7 +129,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -143,7 +145,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -163,7 +165,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -184,7 +186,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -205,7 +207,7 @@ public class EventDAO implements InterfaceEventDAO{
         {
             try {
 
-                String sql = "UPDATE em17.event set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
+                String sql = "UPDATE em17.events set title = '" + e.getTitle() + "', position = '" + e.getPosition() + "',"
                         + " city = '" + e.getCity() + "',"
                         + " ticketsAvaible = '" + e.getTicketsAvaible() + "',"
                         + " type = '" + e.getType() + "',"
@@ -224,7 +226,7 @@ public class EventDAO implements InterfaceEventDAO{
     @Override
     public void removeEvent(String id) {
         try {
-            String sql = "DELETE FROM em17.event where id =  '" + id + "'";
+            String sql = "DELETE FROM em17.events where id =  '" + id + "'";
             stm.execute(sql);
             //conn.close();
         } catch (SQLException ex) {
@@ -238,7 +240,7 @@ public class EventDAO implements InterfaceEventDAO{
         try{
             if(city.equals("-") && type.equals("-"))
             {
-                String query = "SELECT * FROM em17.event";
+                String query = "SELECT * FROM em17.events";
                 stm = conn.createStatement();
                 ResultSet rs = stm.executeQuery(query);
                 while(rs.next())
@@ -260,7 +262,7 @@ public class EventDAO implements InterfaceEventDAO{
                 }
             } else if(!(city.equals("-")) && !(type.equals("-")))
             {
-                String query = "SELECT * FROM em17.event WHERE type = '" + type + "' AND city = '" + city + "'";
+                String query = "SELECT * FROM em17.events WHERE type = '" + type + "' AND city = '" + city + "'";
                 stm = conn.createStatement();
                 ResultSet rs = stm.executeQuery(query);
                 while(rs.next())
@@ -282,7 +284,7 @@ public class EventDAO implements InterfaceEventDAO{
                 }
             } else if(city.equals("-") && !(type.equals("-")))
             {
-                String query = "SELECT * FROM em17.event WHERE type = '" + type + "'";
+                String query = "SELECT * FROM em17.events WHERE type = '" + type + "'";
                 stm = conn.createStatement();
                 ResultSet rs = stm.executeQuery(query);
                 while(rs.next())
@@ -304,7 +306,7 @@ public class EventDAO implements InterfaceEventDAO{
                 }
             } else if(!(city.equals("-")) && type.equals("-"))
             {
-                String query = "SELECT * FROM em17.event WHERE city = '" + city + "'";
+                String query = "SELECT * FROM em17.events WHERE city = '" + city + "'";
                 stm = conn.createStatement();
                 ResultSet rs = stm.executeQuery(query);
                 while(rs.next())
@@ -336,7 +338,7 @@ public class EventDAO implements InterfaceEventDAO{
     public ArrayList<String> getCityEvent()
     {
         ArrayList<String> city = new ArrayList();
-        String query = "SELECT * FROM em17.city_view";
+        String query = "SELECT city FROM em17.events";
             
         try {
             stm = conn.createStatement();
@@ -372,4 +374,5 @@ public class EventDAO implements InterfaceEventDAO{
         } 
         return bos != null ? bos.toByteArray() : null;
     }
+    
 }
