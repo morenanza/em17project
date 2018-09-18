@@ -22,6 +22,7 @@ public class LoginControllerTest {
     AdminDAO model = new AdminDAO();
     LoginPanel view = new LoginPanel();
     public LoginControllerTest() {
+        
     }
     
     @BeforeClass
@@ -44,12 +45,83 @@ public class LoginControllerTest {
      * Test of checkCredential method, of class LoginController.
      */
     @Test
-    public void testCheckCredential() {
-        System.out.println("checkCredential");
+    public void testCheckCredential1() {
+        String user = "";
+        String pass = "";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential2() {
+        String user = "";
+        String pass = "1234";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential3() {
+        String user = "";
+        String pass = "12345";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential4() {
+        String user = "morenanza";
+        String pass = "";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential5() {
+        String user = "morenanza";
+        String pass = "1234";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential6() {
+        String user = "morenanza";
+        String pass = "12345";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential7() {
+        String user = "admin";
+        String pass = "";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential8() {
         String user = "admin";
         String pass = "1234";
-        LoginController instance = new LoginController(model,view);
+        LoginController instance = new LoginController(view);
         int expResult = 1;
+        int result = instance.checkCredential(user, pass);
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testCheckCredential9() {
+        String user = "admin";
+        String pass = "12345";
+        LoginController instance = new LoginController(view);
+        int expResult = -1;
         int result = instance.checkCredential(user, pass);
         assertEquals(expResult, result);
     }

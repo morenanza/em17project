@@ -6,8 +6,6 @@
 package control;
 
 import DAO.EventDAO;
-import java.util.ArrayList;
-import model.Event;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -49,10 +47,20 @@ public class EventControllerTest {
      */
     @Test
     public void testCheckValidExtension() {
-        System.out.println("checkValidExtension");
+        
         String namefile = "prova.pdf";
         EventController instance = new EventController();
         int expResult = -1;
+        int result = instance.checkValidExtension(namefile);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testCheckValidExtension2() {
+        
+        String namefile = "prova.jpg";
+        EventController instance = new EventController();
+        int expResult = 1;
         int result = instance.checkValidExtension(namefile);
         assertEquals(expResult, result);
     }

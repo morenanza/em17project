@@ -226,6 +226,7 @@ public class EventDAO implements InterfaceEventDAO {
     @Override
     public void removeEvent(String id) {
         try {
+            stm = conn.createStatement();
             String sql = "DELETE FROM em17.events where id =  '" + id + "'";
             stm.execute(sql);
             //conn.close();
@@ -338,7 +339,7 @@ public class EventDAO implements InterfaceEventDAO {
     public ArrayList<String> getCityEvent()
     {
         ArrayList<String> city = new ArrayList();
-        String query = "SELECT city FROM em17.events";
+        String query = "SELECT DISTINCT city FROM em17.events";
             
         try {
             stm = conn.createStatement();

@@ -31,10 +31,10 @@ public class EM17 {
         }
      
         
-        AdminDAO modello = new AdminDAO();
+        
         
         LoginPanel login = new LoginPanel();
-        LoginController controllo = new LoginController(modello, login);
+        
         
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         login.setLocation(new Point((dimension.width - login.getSize().width) / 2, 

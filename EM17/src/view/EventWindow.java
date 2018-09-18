@@ -22,8 +22,9 @@ import javax.swing.text.MaskFormatter;
 public class EventWindow extends javax.swing.JFrame {
     private DefaultTableModel defaultTableModel;
     private DefaultTableModel defaultTableModelSearch;
-    
+    private EventController controller;
     public EventWindow() {
+        
         initComponents();
         setUpJTableModel();
         setUpJTableModelSearch();
@@ -31,6 +32,8 @@ public class EventWindow extends javax.swing.JFrame {
         dateTableField.setVisible(false);
         deleteButton.setEnabled(false);
         updateButton.setEnabled(false);
+        controller = new EventController(this);
+        
     }
 
    
@@ -120,6 +123,11 @@ public class EventWindow extends javax.swing.JFrame {
         jLabel10.setText("LOCANDINA");
 
         imgButton.setText("Seleziona");
+        imgButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imgButtonActionPerformed(evt);
+            }
+        });
 
         eventTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -132,13 +140,33 @@ public class EventWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        eventTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                eventTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(eventTable);
 
         insertButton.setText("INSERISCI");
+        insertButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertButtonActionPerformed(evt);
+            }
+        });
 
         updateButton.setText("MODIFICA");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         deleteButton.setText("ELIMINA");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         dateField.setLocale(Locale.ITALIAN);
         dateField.setBackground(new java.awt.Color(255, 255, 255));
@@ -283,13 +311,23 @@ public class EventWindow extends javax.swing.JFrame {
 
         String[] typeSearch = new String[] {"-", "Concerto", "Mostra", "Spettacolo", "Teatro"};
         typeSearchField.setModel(new javax.swing.DefaultComboBoxModel<>(typeSearch));
+        typeSearchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeSearchFieldActionPerformed(evt);
+            }
+        });
 
-        ArrayList<String> city = EventController.getCityEvent();
+        ArrayList<String> city = controller.getCityEvent();
         String[] città = new String[city.size()+1];
         città[0] = "-";
         for (int i=1; i<city.size()+1; i++)
         città[i] = city.get(i-1);
         citySearchField.setModel(new javax.swing.DefaultComboBoxModel<>(città));
+        citySearchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                citySearchFieldActionPerformed(evt);
+            }
+        });
 
         jLabel11.setText("FILTRA PER");
 
@@ -346,6 +384,110 @@ public class EventWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
+        controller.insertEvent();
+    }//GEN-LAST:event_insertButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        controller.updateEvent();
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        controller.deleteEvent();
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void imgButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imgButtonActionPerformed
+        controller.chooseFile();
+    }//GEN-LAST:event_imgButtonActionPerformed
+
+    private void eventTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eventTableMouseClicked
+        //JTable table = view.getEventTable();
+                int row = eventTable.rowAtPoint(evt.getPoint());
+                //System.out.println(table.getValueAt(row, 6).toString().length());
+                getUpdateButton().setEnabled(true);
+                if(eventTable.getValueAt(row, 9).toString().equals("0"))
+                {
+                    getDeleteButton().setEnabled(true);
+                }else 
+                {
+                    getDeleteButton().setEnabled(false);
+                }
+                
+                getIdField().setText(eventTable.getValueAt(row, 0).toString());
+                
+                if(eventTable.getValueAt(row, 1) != null)
+                {
+                    getTitleField().setText(eventTable.getValueAt(row, 1).toString());
+                } else 
+                {
+                    getTitleField().setText("");
+                }
+                String[] type = {"Concerto", "Mostra", "Spettacolo", "Teatro"};
+                for (int i = 0; i<type.length; i++)
+                {
+                    if (eventTable.getValueAt(row, 2).toString().equals(type[i]))
+                    getTypeField().setSelectedIndex(i); 
+                }
+                
+                if(eventTable.getValueAt(row, 3) != null)
+                {
+                    getPositionField().setText(eventTable.getValueAt(row, 3).toString());
+                } else 
+                {
+                    getPositionField().setText("");
+                }
+                if(eventTable.getValueAt(row, 4) != null)
+                {
+                    getCityField().setText(eventTable.getValueAt(row, 4).toString());
+                } else 
+                {
+                    getCityField().setText("");
+                }
+                if(eventTable.getValueAt(row, 5) != null)
+                {
+                    getDateTableField().setText(eventTable.getValueAt(row, 5).toString());
+                } else 
+                {
+                    getDateTableField().setText("");
+                }
+                if(eventTable.getValueAt(row, 6) != null)
+                {
+                    getHourField().setText(eventTable.getValueAt(row, 6).toString());
+                } else 
+                {
+                    getHourField().setText("");
+                }
+                if(eventTable.getValueAt(row, 7) != null)
+                {
+                    getPriceField().setText(eventTable.getValueAt(row, 7).toString());
+                } else 
+                {
+                    getPriceField().setText("");
+                }
+                if(eventTable.getValueAt(row, 8) != null)
+                {
+                    getTicketsAvaibleField().setText(eventTable.getValueAt(row, 8).toString());
+                } else 
+                {
+                    getTicketsAvaibleField().setText("");
+                }
+                if(eventTable.getValueAt(row, 10) != null)
+                {
+                    getDescriptionField().setText(eventTable.getValueAt(row, 10).toString());
+                } else 
+                {
+                    getDescriptionField().setText("");
+                }
+    }//GEN-LAST:event_eventTableMouseClicked
+
+    private void typeSearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeSearchFieldActionPerformed
+        controller.filterByType();
+    }//GEN-LAST:event_typeSearchFieldActionPerformed
+
+    private void citySearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citySearchFieldActionPerformed
+       controller.filterByCity();
+    }//GEN-LAST:event_citySearchFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cityField;
@@ -434,7 +576,7 @@ public class EventWindow extends javax.swing.JFrame {
 
         defaultTableModel.getDataVector().clear();
 
-        ArrayList<Event> eventi = EventController.refreshRecord();
+        ArrayList<Event> eventi = controller.refreshRecord();
 
         eventi.stream().forEach((currentEvent) -> {
             defaultTableModel.addRow(new Object[]{currentEvent.getId(), currentEvent.getTitle(), currentEvent.getType(), currentEvent.getPosition(), currentEvent.getCity(), currentEvent.getDate(), currentEvent.getHour(), currentEvent.getPrice(), currentEvent.getTicketsAvaible(), currentEvent.getTicketsSell(), currentEvent.getDescription()});
@@ -446,7 +588,7 @@ public class EventWindow extends javax.swing.JFrame {
 
         defaultTableModelSearch.getDataVector().clear();
 
-        ArrayList<Event> eventi = EventController.refreshRecord();
+        ArrayList<Event> eventi = controller.refreshRecord();
 
         eventi.stream().forEach((currentEvent) -> {
             defaultTableModelSearch.addRow(new Object[]{currentEvent.getId(), currentEvent.getTitle(), currentEvent.getType(), currentEvent.getPosition(), currentEvent.getCity(), currentEvent.getDate(), currentEvent.getHour(), currentEvent.getPrice(), currentEvent.getTicketsAvaible(), currentEvent.getTicketsSell(), currentEvent.getDescription()});
@@ -463,7 +605,6 @@ public class EventWindow extends javax.swing.JFrame {
         });
         defaultTableModelSearch.fireTableDataChanged();
     }
-    
     
     public JTextField getIdField()
     {
