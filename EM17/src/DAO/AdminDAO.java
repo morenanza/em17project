@@ -14,17 +14,17 @@ public class AdminDAO implements InterfaceAdminDAO{
     private Database db = new Database();
     private Connection conn = db.Connect();
     private Statement stm = null; 
-    public Admin getAdmin(String username) {
+    public Admin getAdmin(String username, String password) {
     Admin admin = new Admin();
     try {
-            String query = "SELECT * FROM em17.admin WHERE username = 'admin'";
+            String query = "SELECT * FROM em17.admin";
             conn = db.Connect();
             stm = conn.createStatement();
             
             ResultSet rs = stm.executeQuery(query);
             
             while(rs.next()){
-                if(rs.getString("username").equals(username))
+                if(rs.getString("username").equals(username) && rs.getString("password").equals(password))
                 {
                     admin.setUsername(rs.getString("username"));
                     admin.setPassword(rs.getString("password")); 

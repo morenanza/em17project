@@ -15,40 +15,40 @@ public class LoginController {
     AdminDAO model;
     LoginPanel view;
     LoginController(){}
-    public LoginController(AdminDAO x, LoginPanel y)
+    public LoginController(LoginPanel y)
     {
-        model = x;
+        model = new AdminDAO();
         view = y;
-        view.getLoginButton().addActionListener((ActionEvent e) -> {
-            JTextField user = view.getUserField();
-            JPasswordField password = view.getPassField();
+    }
+    
+    public void login(String user, String password)
+    {
+        
+        
             EventWindow prin = new EventWindow();
-            EventDAO modello = new EventDAO();
-            EventController control = new EventController(prin, modello);
             Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
             prin.setLocation(new Point((dimension.width - prin.getSize().width) / 2,
                     (dimension.height - prin.getSize().height) / 2 ));
-            String p =  new String(password.getPassword());
-            if (checkCredential(user.getText(), p) == 1){
-                
-                prin.setVisible(true);
-                view.setVisible(false);
-                
-            }else
-            {
-                view.getErrorLabel().setVisible(true);
-            }
-        });
+            
+            if(checkCredential(user, password) == 1){
+                    prin.setVisible(true);
+                    view.setVisible(false);
+                  
+
+                }else
+                {
+                    view.getErrorLabel().setVisible(true);
+                    
+                }
+           
     }
     
-    public int checkCredential(String user, String pass)
+    public int checkCredential(String user, String password)
     {
-        Admin admin = model.getAdmin(user);
-        if(admin != null){
-            if(user.equals(admin.getUsername()) && pass.equals(admin.getPassword()))
-            {
-                return 1;
-            }
+        Admin admin = model.getAdmin(user, password);
+        if(admin != null)
+        {
+            return 1;
         }
         return -1;
     }

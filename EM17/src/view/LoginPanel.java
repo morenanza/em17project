@@ -1,5 +1,6 @@
 package view;
 
+import control.LoginController;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -7,8 +8,9 @@ import javax.swing.JTextField;
 
 
 public class LoginPanel extends javax.swing.JFrame {
-
+    private LoginController controller;
     public LoginPanel() {
+        controller = new LoginController(this);
         initComponents();
         errorLabel.setVisible(false);
     }
@@ -34,6 +36,11 @@ public class LoginPanel extends javax.swing.JFrame {
         jLabel3.setText("password: ");
 
         loginButton.setText("ACCEDI");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
 
         errorLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         errorLabel.setText("Username o Password Errata!");
@@ -84,6 +91,11 @@ public class LoginPanel extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        String password = new String(passwordField.getPassword());
+        controller.login(userField.getText(), password);
+    }//GEN-LAST:event_loginButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -11,32 +11,18 @@ public class DeleteController {
     ConfirmWindow view;
     EventWindow parent;
     Event evento;
-    public DeleteController(EventWindow p, ConfirmWindow v)
+    EventDAO model;
+    public DeleteController(EventWindow p, ConfirmWindow v, Event e)
     {
         view = v;
         parent = p;
-        evento = v.getEvent();
-        if(evento.getTitle() != null)
-            view.getTitleLabel().setText(evento.getTitle());
-        if(evento.getType() != null)
-            view.getTypeLabel().setText(evento.getType());
-        view.getDateLabel().setText(parent.getDateTableField().getText());
-        if(evento.getHour() != null)
-            view.getHourLabel().setText(evento.getHour());
-        if(evento.getTicketsAvaible() != null)
-            view.getTicketsLabel().setText(evento.getTicketsAvaible());
-        if(evento.getPrice() != null)
-            view.getPriceLabel().setText(evento.getPrice());
-        if(evento.getCity() != null)
-            view.getCityLabel().setText(evento.getCity());
-        if(evento.getPosition() != null)
-            view.getPositionLabel().setText(evento.getPosition());
-        
-        view.getConfirmButton().addActionListener((ActionEvent e) -> 
-        {
-            EventDAO dao = new EventDAO();
-            ArrayList<Event> eventi = dao.getAllEvent();
-            dao.removeEvent(evento.getId());
+        evento = e;
+        model = new EventDAO();
+    }
+    
+    public void confirm()
+    {
+            model.removeEvent(evento.getId());
             parent.getTitleField().setText("");
             parent.getPositionField().setText("");
             parent.getCityField().setText("");
@@ -55,11 +41,10 @@ public class DeleteController {
                 città[i] = city.get(i-1);
             parent.getCitySearchField().setModel(new javax.swing.DefaultComboBoxModel<>(città));
             view.setVisible(false);
-        });
-        
-        view.getStopButton().addActionListener((ActionEvent e) -> 
-        {
-            view.setVisible(false);
-        });
+    }
+    
+    public void stop()
+    {
+        view.setVisible(false);
     }
 }
