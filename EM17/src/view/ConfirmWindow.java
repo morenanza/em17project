@@ -7,12 +7,29 @@ import model.Event;
 
 public class ConfirmWindow extends javax.swing.JDialog {
     Event evento;
+    DeleteController controller;
     public ConfirmWindow(EventWindow parent, boolean modal, Event e) {
         super(parent, modal);
         setTitle("Elimina Evento");
+        controller = new DeleteController(parent, this, e);
         initComponents();
         evento = e;
-        DeleteController control = new DeleteController(parent, this);
+        if(evento.getTitle() != null)
+            getTitleLabel().setText(evento.getTitle());
+        if(evento.getType() != null)
+            getTypeLabel().setText(evento.getType());
+        getDateLabel().setText(parent.getDateTableField().getText());
+        if(evento.getHour() != null)
+            getHourLabel().setText(evento.getHour());
+        if(evento.getTicketsAvaible() != null)
+            getTicketsLabel().setText(evento.getTicketsAvaible());
+        if(evento.getPrice() != null)
+            getPriceLabel().setText(evento.getPrice());
+        if(evento.getCity() != null)
+            getCityLabel().setText(evento.getCity());
+        if(evento.getPosition() != null)
+            getPositionLabel().setText(evento.getPosition());
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -85,8 +102,18 @@ public class ConfirmWindow extends javax.swing.JDialog {
         positionLabel.setText("        ");
 
         confirmButton.setText("Conferma");
+        confirmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmButtonActionPerformed(evt);
+            }
+        });
 
         stopButton.setText("Annulla");
+        stopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -176,6 +203,14 @@ public class ConfirmWindow extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
+        controller.confirm();
+    }//GEN-LAST:event_confirmButtonActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+        controller.stop();
+    }//GEN-LAST:event_stopButtonActionPerformed
     public Event getEvent()
     {
         return evento;

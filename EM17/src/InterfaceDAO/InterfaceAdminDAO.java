@@ -3,5 +3,5 @@ package InterfaceDAO;
 import model.Admin;
 
 public interface InterfaceAdminDAO {
-    public Admin getAdmin();
+    public Admin getAdmin(String user, String password);
 }

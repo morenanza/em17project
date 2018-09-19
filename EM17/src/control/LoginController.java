@@ -14,30 +14,42 @@ import view.LoginPanel;
 public class LoginController {
     AdminDAO model;
     LoginPanel view;
-    public LoginController(AdminDAO x, LoginPanel y)
+    LoginController(){}
+    public LoginController(LoginPanel y)
     {
-        model = x;
+        model = new AdminDAO();
         view = y;
-        view.getLoginButton().addActionListener((ActionEvent e) -> {
-            JTextField user = view.getUserField();
-            JPasswordField password = view.getPassField();
-            Admin admin = model.getAdmin();
+    }
+    
+    public void login(String user, String password)
+    {
+        
+        
             EventWindow prin = new EventWindow();
-            EventDAO modello = new EventDAO();
-            EventController control = new EventController(prin, modello);
             Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
             prin.setLocation(new Point((dimension.width - prin.getSize().width) / 2,
                     (dimension.height - prin.getSize().height) / 2 ));
-            String p =  new String(password.getPassword());
-            if (user.getText().equals(admin.getUsername()) && p.equals(admin.getPassword())){
-                
-                prin.setVisible(true);
-                view.setVisible(false);
-                
-            }else
-            {
-                view.getErrorLabel().setVisible(true);
-            }
-        });
+            
+            if(checkCredential(user, password) == 1){
+                    prin.setVisible(true);
+                    view.setVisible(false);
+                  
+
+                }else
+                {
+                    view.getErrorLabel().setVisible(true);
+                    
+                }
+           
+    }
+    
+    public int checkCredential(String user, String password)
+    {
+        Admin admin = model.getAdmin(user, password);
+        if(admin != null)
+        {
+            return 1;
+        }
+        return -1;
     }
 }
