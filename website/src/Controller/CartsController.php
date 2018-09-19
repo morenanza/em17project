@@ -99,40 +99,59 @@
     public function check($id, $idEvent, $count)
     {
          if (!empty($this->request->data)) {
+             
              if(empty($this->request->data['customer']) || empty($this->request->data['card']) || empty($this->request->data['cvv'])) 
              {
-                 $message = 'Compila i campi: Customer, Card e CVV';
-                 $this->Flash->success(__($message, ['key' => 'message']));
+                 $message = 'Compila tutti i dati di pagamento';
+                 $this->Flash->error(__($message, ['key' => 'message']));
                  
                 
                  $this->redirect(array('action'=>'payment', $id, $idEvent, $count));
                  
              }else {
-                if($this->request->data['card']%2 == 0)
+                if(empty($this->request->data['name']) || empty($this->request->data['surname']) || empty($this->request->data['address']) || empty($this->request->data['city']) || empty($this->request->data['province'])) 
                 {
-                    $this->loadModel('Events');
-                    $event = $this->Events->get($idEvent);
-                    $query = $this->Events->query();
-                    $query->update()
-                    ->set(['ticketsSell' => $event->ticketsSell + $count])
-                    ->where(['id' => $idEvent])
-                    ->execute();
-                    
-                    
-                    $this->loadModel('Orders');
-                    $query = $this->Orders->query();
-                    $query->insert(['idCustomer', 'idEvent', 'quantity'])
-                    ->values([
-                        'idCustomer' => $id,
-                        'idEvent' => $idEvent,
-                        'quantity' => $count
-                    ])
-                    ->execute();
-                    
-                     $this->redirect(array('action'=>'generate', $id));
-                } else 
-                {
-                    $this->redirect(array('action' => 'notvalid'));
+                    $message = 'Compila tutti i dati di fatturazione';
+                 $this->Flash->error(__($message, ['key' => 'message']));
+                 
+                
+                 $this->redirect(array('action'=>'payment', $id, $idEvent, $count));
+                }else {
+                    if($this->request->data['card'] <= 999999999999999 || $this->request->data['card'] > 9999999999999999 || $this->request->data['cvv'] <= 99 || $this->request->data['cvv'] > 999)
+                    {
+                        $message = 'Dati di pagamento non validi. Inserire un numero di carta di 16 cifre ed un codice cvv di 3 cifre.';
+                        $this->Flash->error(__($message, ['key' => 'message']));
+                 
+                
+                        $this->redirect(array('action'=>'payment', $id, $idEvent, $count));
+                    }else {
+                        if($this->request->data['card']%2 == 0)
+                        {
+                            $this->loadModel('Events');
+                            $event = $this->Events->get($idEvent);
+                            $query = $this->Events->query();
+                            $query->update()
+                            ->set(['ticketsSell' => $event->ticketsSell + $count])
+                            ->where(['id' => $idEvent])
+                            ->execute();
+                            
+                            
+                            $this->loadModel('Orders');
+                            $query = $this->Orders->query();
+                            $query->insert(['idCustomer', 'idEvent', 'quantity'])
+                            ->values([
+                                'idCustomer' => $id,
+                                'idEvent' => $idEvent,
+                                'quantity' => $count
+                            ])
+                            ->execute();
+                            
+                             $this->redirect(array('action'=>'generate', $id));
+                        } else 
+                        {
+                            $this->redirect(array('action' => 'notvalid'));
+                        }
+                    }
                 }
              }
          }
@@ -147,7 +166,7 @@
     
     public function notvalid()
     {
-        $this->Flash->success(__('Pagamento non andato a buon fine.', ['key' => 'message']));
+        
     }
     
     public function generate($id)
