@@ -1,6 +1,6 @@
 package view;
 
-import DAO.EventDAO;
+import dao.mysql.EventDAO;
 import com.toedter.calendar.JDateChooser;
 import java.util.ArrayList;
 import model.Event;
@@ -405,13 +405,13 @@ public class EventWindow extends javax.swing.JFrame {
         //JTable table = view.getEventTable();
                 int row = eventTable.rowAtPoint(evt.getPoint());
                 //System.out.println(table.getValueAt(row, 6).toString().length());
-                getUpdateButton().setEnabled(true);
+                updateButton.setEnabled(true);
                 if(eventTable.getValueAt(row, 9).toString().equals("0"))
                 {
-                    getDeleteButton().setEnabled(true);
+                    deleteButton.setEnabled(true);
                 }else 
                 {
-                    getDeleteButton().setEnabled(false);
+                    deleteButton.setEnabled(false);
                 }
                 
                 getIdField().setText(eventTable.getValueAt(row, 0).toString());
@@ -482,11 +482,11 @@ public class EventWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_eventTableMouseClicked
 
     private void typeSearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeSearchFieldActionPerformed
-        controller.filterByType();
+        controller.filter();
     }//GEN-LAST:event_typeSearchFieldActionPerformed
 
     private void citySearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citySearchFieldActionPerformed
-       controller.filterByCity();
+       controller.filter();
     }//GEN-LAST:event_citySearchFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

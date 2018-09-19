@@ -15,20 +15,20 @@ public class ConfirmWindow extends javax.swing.JDialog {
         initComponents();
         evento = e;
         if(evento.getTitle() != null)
-            getTitleLabel().setText(evento.getTitle());
+            titleLabel.setText(evento.getTitle());
         if(evento.getType() != null)
-            getTypeLabel().setText(evento.getType());
-        getDateLabel().setText(parent.getDateTableField().getText());
+            typeLabel.setText(evento.getType());
+        dateLabel.setText(parent.getDateTableField().getText());
         if(evento.getHour() != null)
-            getHourLabel().setText(evento.getHour());
+            hourLabel.setText(evento.getHour());
         if(evento.getTicketsAvaible() != null)
-            getTicketsLabel().setText(evento.getTicketsAvaible());
+            ticketsLabel.setText(evento.getTicketsAvaible());
         if(evento.getPrice() != null)
-            getPriceLabel().setText(evento.getPrice());
+            priceLabel.setText(evento.getPrice());
         if(evento.getCity() != null)
-            getCityLabel().setText(evento.getCity());
+            cityLabel.setText(evento.getCity());
         if(evento.getPosition() != null)
-            getPositionLabel().setText(evento.getPosition());
+            positionLabel.setText(evento.getPosition());
         
     }
 
@@ -214,46 +214,6 @@ public class ConfirmWindow extends javax.swing.JDialog {
     public Event getEvent()
     {
         return evento;
-    }
-    public JLabel getTitleLabel()
-    {
-        return titleLabel;
-    }
-    public JLabel getTypeLabel()
-    {
-        return typeLabel;
-    }
-    public JLabel getDateLabel()
-    {
-        return dateLabel;
-    }
-    public JLabel getHourLabel()
-    {
-        return hourLabel;
-    }
-    public JLabel getTicketsLabel()
-    {
-        return ticketsLabel;
-    }
-    public JLabel getPriceLabel()
-    {
-        return priceLabel;
-    }
-    public JLabel getCityLabel()
-    {
-        return cityLabel;
-    }
-    public JLabel getPositionLabel()
-    {
-        return positionLabel;
-    }
-    public JButton getConfirmButton()
-    {
-        return confirmButton;
-    }
-    public JButton getStopButton()
-    {
-        return stopButton;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
