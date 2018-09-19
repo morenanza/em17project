@@ -5,7 +5,7 @@
  */
 package em17;
 
-import DAO.AdminDAO;
+import dao.mysql.AdminDAO;
 import control.LoginController;
 import java.awt.Dimension;
 import java.awt.Point;

@@ -1,6 +1,7 @@
 package control;
 
-import DAO.EventDAO;
+import dao.mysql.EventDAO;
+import dao.interfaces.InterfaceEventDAO;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -20,7 +21,7 @@ import view.EventWindow;
 public class EventController {
     
     EventWindow view;
-    EventDAO model;
+    InterfaceEventDAO model;
     File file;
     public EventController(){}
     public EventController(EventWindow x)
@@ -29,16 +30,7 @@ public class EventController {
         model = new EventDAO();
     }
     
-    public void filterByType()
-    {
-        EventDAO event = new EventDAO();
-            JComboBox type = view.getTypeSearchField();
-            JComboBox city = view.getCitySearchField();
-            ArrayList<Event> eventi = refreshRecordSearch(city.getSelectedItem().toString(), type.getSelectedItem().toString());
-            view.refreshTableSearch(eventi);
-    }
-    
-    public void filterByCity()
+    public void filter()
     {
         EventDAO event = new EventDAO();
             JComboBox type = view.getTypeSearchField();

@@ -1,7 +1,8 @@
 package control;
 
-import DAO.AdminDAO;
-import DAO.EventDAO;
+import dao.mysql.AdminDAO;
+import dao.mysql.EventDAO;
+import dao.interfaces.InterfaceAdminDAO;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -12,7 +13,7 @@ import model.Admin;
 import view.EventWindow;
 import view.LoginPanel;
 public class LoginController {
-    AdminDAO model;
+    InterfaceAdminDAO model;
     LoginPanel view;
     LoginController(){}
     public LoginController(LoginPanel y)

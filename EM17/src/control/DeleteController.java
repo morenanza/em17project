@@ -1,6 +1,7 @@
 package control;
 
-import DAO.EventDAO;
+import dao.mysql.EventDAO;
+import dao.interfaces.InterfaceEventDAO;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import model.Event;
@@ -11,7 +12,7 @@ public class DeleteController {
     ConfirmWindow view;
     EventWindow parent;
     Event evento;
-    EventDAO model;
+    InterfaceEventDAO model;
     public DeleteController(EventWindow p, ConfirmWindow v, Event e)
     {
         view = v;
